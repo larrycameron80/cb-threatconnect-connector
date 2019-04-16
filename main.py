@@ -11,6 +11,7 @@ from threatconnect import ThreatConnect
 from threatconnect.Config.FilterOperator import FilterOperator
 import os
 import sys
+import urllib
 
 logging_format = '%(asctime)s-%(name)s-%(lineno)d-%(levelname)s-%(message)s'
 logging.basicConfig(format=logging_format)
@@ -197,6 +198,7 @@ class CbThreatConnectConnector(object):
                                       datetime.strptime(indicator.date_added, "%Y-%m-%dT%H:%M:%SZ").timestamp()),
                                   }
                         # The next few lines are designed to insert the Cb supported IOCs into the record.
+                        logger.debug("Indacator is {0}".format(indicator))
                         if indicator.type == "File":
                             fields['iocs'] = {k: [indicator.indicator[k]] for k in indicator.indicator if
                                               indicator.indicator[k] is not None}
@@ -205,8 +207,9 @@ class CbThreatConnectConnector(object):
                         elif indicator.type == "Host":
                             fields['iocs']['dns'] = [indicator.indicator]
                         else:
+                            squery = urllib.parse.urlencode({"cb.urlver":"1","q":indicator.indicator[self.custom_ioc_key]})
                             fields['iocs']['query'] = [{'index_type': 'modules',
-                                                        'search_query': "cb.urlver=1&q=" + indicator.indicator[self.custom_ioc_key]}]
+                                                        'search_query': squery }]
 
                         report = CbReport(**fields)
                         try:
