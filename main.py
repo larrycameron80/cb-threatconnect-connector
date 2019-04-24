@@ -231,7 +231,7 @@ def main(config_file, log_file, out_file):
     cfg = verify_config(config_file)
     cfg['out_file'] = out_file
     cfg['log_file'] = log_file
-    cfg['feed_url'] = os.path.join("file://",log_file)
+    cfg['feed_url'] = os.path.join("file://",out_file)
 
     threatconnectconnector = CbThreatConnectConnector(**cfg)
 
