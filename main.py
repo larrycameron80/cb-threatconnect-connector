@@ -231,6 +231,7 @@ def main(config_file, log_file, out_file):
     cfg = verify_config(config_file)
     cfg['out_file'] = out_file
     cfg['log_file'] = log_file
+    cfg['feed_url'] = os.path.join("file://",log_file)
 
     threatconnectconnector = CbThreatConnectConnector(**cfg)
 
@@ -307,11 +308,6 @@ def verify_config(config_file):
                                                                                             't'] else False
     else:
         cfg['cb_server_ssl_verify'] = True
-
-    if 'feed_url' in config['general']:
-        cfg['feed_url'] = config['general']['feed_url']
-    else:
-        cfg['feed_url'] = "file:///" + cfg['out_file']
 
     if 'max_iocs' in config['general']:
         cfg['max_iocs'] = int(config['general']['max_iocs'])
