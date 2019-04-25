@@ -20,12 +20,6 @@ The TC agent must be installed on the same system as Cb Response.
 	wget -O /usr/share/cb/integrations/ https://github.com/carbonblack/cb-threatconnect-connector/releases/download/2.0.0/tc_agent
 	```
 	
-* Download threatconnect Logo
-
-	```
-	wget -O /usr/share/cb/integrations/threatconnect/threatconnect-logo.png https://github.com/carbonblack/cb-threatconnect-connector/releases/download/2.0.0/threatconnect-logo.png
-	```
-	
 * Create threatconnect Agent Config File
 
 
@@ -36,7 +30,6 @@ The TC agent must be installed on the same system as Cb Response.
 	# CB Response configuration details.  This is used to create the feed in the CB Response UI automatically
 	# feed_url should be the same file path as is used in out-file parameter for tc_agent
 	#
-	feed_url=file://tmp/threatconnect.json
 	cb_server_url=https://192.168.1.42
 	cb_server_token=
 	cb_server_ssl_verify=False
