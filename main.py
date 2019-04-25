@@ -45,6 +45,7 @@ class CbThreatConnectConnector(object):
                  debug=False,
                  log_file=None,
                  max_iocs=5000):
+
         logger.info("ThreatConnect Base URL: {0}".format(base_url))
 
         self.tcapi = ThreatConnect(api_aid=access_id, api_sec=secret_key, api_url=base_url, api_org=default_org)

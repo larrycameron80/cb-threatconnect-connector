@@ -6,7 +6,7 @@ block_cipher = None
 a = Analysis(['main.py'],
              pathex=['.'],
              binaries=[],
-             datas=[ (HOMEPATH + '/cbapi/response/models/*', 'cbapi/response/models/'),
+             datas=[(HOMEPATH + '/cbapi/response/models/*', 'cbapi/response/models/'),
                      (HOMEPATH + '/cbapi/protection/models/*', 'cbapi/protection/models/'),
                      (HOMEPATH + '/cbapi/psc/defense/models/*','/cbapi/psc/defense/models/'),
                      (HOMEPATH + '/cbapi/psc/threathunter/models/*','/cbapi/psc/threathunter/models/')],
@@ -18,6 +18,7 @@ a = Analysis(['main.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
+a.datas += [('threatconnect-logo.png','threatconnect-logo.png','threatconnect-logo.png')]
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,

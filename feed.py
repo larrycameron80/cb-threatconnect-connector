@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import sys
 import re
 import time
 import logging
@@ -128,16 +129,17 @@ class CbFeed(object):
         self.validate_report_list(data["reports"])
 
     def upload(self,cb,feed_url,enabled=True,force=True,username=None,password=None,cert=None,key=None,use_proxy=False,validate_server_cert=False):
-            configured_feeds = [f for f in cb.select(Feed) if f.feed_url == feed_url]
-            if len(configured_feeds):
-                print("Warning: Feeds already configured for this url: {0:s}:".format(feed_url))
-                for f in configured_feeds:
-                    print(f)
-                    print("")
-                if not force:
-                    return
+            #configured_feeds = [f for f in cb.select(Feed) if f.feed_url == feed_url]
+            #if len(configured_feeds):
+            #    print("Warning: Feeds already configured for this url: {0:s}:".format(feed_url))
+            #    for f in configured_feeds:
+            #        print(f)
+            #        print("")
+            #    if not force:
+            #       return
 
-            f = cb.create(Feed)
+            fs = [f for f in cb.select(Feed) if f.name == self.data['feedinfo'].data['name']]
+            f = fs[0] if len(fs) > 0 else cb.create(Feed)
             f.feed_url = feed_url
             if enabled:
                 f.enabled = True
@@ -188,8 +190,8 @@ class CbFeedInfo(object):
         # if they are present, set the icon fields of the data to hold
         # the base64 encoded file data from their path
         for icon_field in ["icon", "icon_small"]:
-            if icon_field in self.data and os.path.exists(self.data[icon_field]):
-                icon_path = self.data.pop(icon_field)
+            if icon_field in self.data and os.path.exists(resource_path(self.data[icon_field])):
+                icon_path = resource_path(self.data.pop(icon_field))
                 try:
                     self.data[icon_field] = base64.b64encode(open(icon_path, "rb").read()).decode('utf-8')
                 except Exception as err:
@@ -461,3 +463,15 @@ class CbReport(object):
 
     def __repr__(self):
         return repr(self.data)
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+#Logo = resource_path("Logo.png")
