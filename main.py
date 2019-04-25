@@ -243,75 +243,79 @@ def main(config_file, log_file, out_file):
 def verify_config(config_file):
     cfg = {}
 
-    config = configparser.ConfigParser()
-    config.read(config_file)
+    try:
+        config = configparser.ConfigParser()
+        config.read(config_file)
 
-    if not config.has_section('general'):
-        raise ThreatConnectConfigurationError('Config does not have a \'general\' section.')
+        if not config.has_section('general'):
+            raise ThreatConnectConfigurationError('Config does not have a \'general\' section.')
 
-    if 'niceness' in config['general']:
-        cfg['niceness'] = int(config['general']['niceness'])
-        os.nice(cfg['niceness'])
+        if 'niceness' in config['general']:
+            cfg['niceness'] = int(config['general']['niceness'])
+            os.nice(cfg['niceness'])
 
-    if 'debug' in config['general']:
-        cfg['debug'] = bool(config['general']['debug'])
+        if 'debug' in config['general']:
+            cfg['debug'] = bool(config['general']['debug'])
 
-    if not 'base_url' in config['general']:
-        raise ThreatConnectConfigurationError("Config does not have an \'base_url\' key-value pair.")
-    else:
-        cfg['base_url'] = config['general']['base_url']
+        if not 'base_url' in config['general']:
+            raise ThreatConnectConfigurationError("Config does not have an \'base_url\' key-value pair.")
+        else:
+            cfg['base_url'] = config['general']['base_url']
 
-    if not 'secret_key' in config['general']:
-        raise ThreatConnectConfigurationError("Config does not have an \'secret_key\' key-value pair.")
-    else:
-        cfg['secret_key'] = config['general']['secret_key']
+        if not 'secret_key' in config['general']:
+            raise ThreatConnectConfigurationError("Config does not have an \'secret_key\' key-value pair.")
+        else:
+            cfg['secret_key'] = config['general']['secret_key']
 
-    if not 'access_id' in config['general']:
-        raise ThreatConnectConfigurationError("Config does not have an \'access_id\' key-value pair.")
-    else:
-        cfg['access_id'] = config['general']['access_id']
+        if not 'access_id' in config['general']:
+            raise ThreatConnectConfigurationError("Config does not have an \'access_id\' key-value pair.")
+        else:
+            cfg['access_id'] = config['general']['access_id']
 
-    if not 'default_org' in config['general']:
-        raise ThreatConnectConfigurationError("Config does not have an \'default_org\' key-value pair.")
-    else:
-        cfg['default_org'] = config['general']['default_org']
+        if not 'default_org' in config['general']:
+            raise ThreatConnectConfigurationError("Config does not have an \'default_org\' key-value pair.")
+        else:
+            cfg['default_org'] = config['general']['default_org']
 
-    if not 'sources' in config['general']:
-        raise ThreatConnectConfigurationError("Config does not have an \'sources\' key-value pair.")
-    else:
-        cfg['sources'] = [s.strip() for s in config['general']['sources'].split(",")]
+        if not 'sources' in config['general']:
+            raise ThreatConnectConfigurationError("Config does not have an \'sources\' key-value pair.")
+        else:
+            cfg['sources'] = [s.strip() for s in config['general']['sources'].split(",")]
 
-    if 'ioc_min' in config['general']:
-        cfg['ioc_min'] = int(config['general']['ioc_min'])
+        if 'ioc_min' in config['general']:
+            cfg['ioc_min'] = int(config['general']['ioc_min'])
 
-    if 'ioc_types' in config['general']:
-        cfg['ioc_types'] = [s.strip() for s in config['general']['ioc_types'].split(",")]
-    else:
-        cfg['ioc_types'] = ['File', 'Address', 'Host']
+        if 'ioc_types' in config['general']:
+            cfg['ioc_types'] = [s.strip() for s in config['general']['ioc_types'].split(",")]
+        else:
+            cfg['ioc_types'] = ['File', 'Address', 'Host']
 
-    if 'custom_ioc_key' in config['general']:
-        cfg['custom_ioc_key'] = config['general']['custom_ioc_key']
-    else:
-        cfg['custom_ioc_key'] = 'Query'
+        if 'custom_ioc_key' in config['general']:
+            cfg['custom_ioc_key'] = config['general']['custom_ioc_key']
+        else:
+            cfg['custom_ioc_key'] = 'Query'
 
-    if 'cb_server_token' in config['general']:
-        cfg['cb_server_token'] = config['general']['cb_server_token']
-    else:
-        raise ThreatConnectConfigurationError("Config does not have a 'cb_server_token'")
+        if 'cb_server_token' in config['general']:
+            cfg['cb_server_token'] = config['general']['cb_server_token']
+        else:
+            raise ThreatConnectConfigurationError("Config does not have a 'cb_server_token'")
 
-    if 'cb_server_url' in config['general']:
-        cfg['cb_server_url'] = config['general']['cb_server_url']
-    else:
-        raise ThreatConnectConfigurationError("config does not have a 'cb_server_url'")
+        if 'cb_server_url' in config['general']:
+            cfg['cb_server_url'] = config['general']['cb_server_url']
+        else:
+            raise ThreatConnectConfigurationError("config does not have a 'cb_server_url'")
 
-    if 'cb_server_ssl_verify' in config['general']:
-        cfg['cb_server_ssl_verify'] = True if config['general']['cb_server_ssl_verify'] in ['True', 'true', 'T',
-                                                                                            't'] else False
-    else:
-        cfg['cb_server_ssl_verify'] = True
+        if 'cb_server_ssl_verify' in config['general']:
+            cfg['cb_server_ssl_verify'] = True if config['general']['cb_server_ssl_verify'] in ['True', 'true', 'T',
+                                                                                                't'] else False
+        else:
+            cfg['cb_server_ssl_verify'] = True
 
-    if 'max_iocs' in config['general']:
-        cfg['max_iocs'] = int(config['general']['max_iocs'])
+        if 'max_iocs' in config['general']:
+            cfg['max_iocs'] = int(config['general']['max_iocs'])
+    except Exception as e:
+        logger.info(traceback.format_exc())
+        raise e
 
     return cfg
 
