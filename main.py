@@ -232,7 +232,7 @@ def main(config_file, log_file, out_file):
     cfg = verify_config(config_file)
     cfg['out_file'] = out_file
     cfg['log_file'] = log_file
-    cfg['feed_url'] = "file:////"+out_file
+    cfg['feed_url'] = "file://"+out_file
 
     threatconnectconnector = CbThreatConnectConnector(**cfg)
 
